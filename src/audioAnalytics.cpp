@@ -75,6 +75,11 @@ void audioAnalytics::setupVectors(){
     vector<float> fftValues;
     fftValues.assign(512, 0);
     
+    for ( int i = 0; i < numTracks; i++ ) {
+        samples.push_back(fftValues);
+    }
+    
+    
 //    for ( int i = 0; i < numTracks; i++ ) {
 //        ofxAudioUnitFilePlayer * stem = new ofxAudioUnitFilePlayer();
 //        stems.push_back(stem);
@@ -220,7 +225,8 @@ void audioAnalytics::updateAnalytics(){
         float waveformSize = (selectedTrack == -1) ? ofGetHeight()/numTracks : ofGetHeight();
         
         taps[i]->getLeftWaveform(waves[i], ofGetWidth(), waveformSize);///numTracks
-        taps[i]->getSamples(audioFeatures[i]->inputBuffer);
+        taps[i]->getSamples(samples[i]);
+        audioFeatures[i]->inputBuffer = samples[i];
         audioFeatures[i]->process(0);
         
         dB[i] = mixer.getInputLevel(i);

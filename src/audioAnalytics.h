@@ -45,6 +45,8 @@ public:
     void drawSkewHistory(int track, float height);
     void drawKurtosisHistory(int track, float height);
     
+    float getAmpNormalized(int track) { return ofMap(amp[track], 0, maxAmp[track], 0.0, 1.0); }
+    
     void mousePressed(int x, int y);
     void keyPressed(int key);
     
@@ -53,6 +55,7 @@ public:
     vector<ofxAudioUnitTap*> taps;
     vector<ofxAudioUnitFftNode*> ffts;
     vector<ofPolyline> waves;
+    vector<vector<float> > samples;
     ofxAudioUnitMixer mixer;
     ofxAudioUnitOutput output;
 
