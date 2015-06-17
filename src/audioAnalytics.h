@@ -39,6 +39,7 @@ public:
     void drawAmpHistory(int track, float height);
     void drawDBHistory(int track, float height);
     void drawFFT(int track, float height);
+    void drawFFTPeakHistory(int track, float height);
     void drawPitchHistory(int track, float height);
     void drawCentroidHistory(int track, float height);
     void drawSpreadHistory(int track, float height);
@@ -46,6 +47,7 @@ public:
     void drawKurtosisHistory(int track, float height);
     
     float getAmpNormalized(int track) { return ofMap(amp[track], 0, maxAmp[track], 0.0, 1.0); }
+    float getFFTPeakNormalized(int track) { return ofMap(fftPeak[track], 0, maxFftPeak[track], 0.0, 1.0); }
     
     void mousePressed(int x, int y);
     void keyPressed(int key);
@@ -72,6 +74,7 @@ public:
     vector<scrollingGraph> ampHistory;
     vector<scrollingGraph> dBHistory;
     vector<scrollingGraph> pitchHistory;
+    vector<scrollingGraph> fftPeakHistory;
     vector<scrollingGraph> centroidHistory;
     vector<scrollingGraph> spreadHistory;
     vector<scrollingGraph> skewHistory;
@@ -109,7 +112,7 @@ public:
     bool bFindMinMax;
 
     //analytics
-    vector <float> maxdB, maxAmp, maxfft, maxPitch, maxCentroid, maxSpread, maxSkew, maxKurtosis;
+    vector <float> maxdB, maxAmp, maxfft, maxFftPeak, maxPitch, maxCentroid, maxSpread, maxSkew, maxKurtosis;
     float maxdBGlobal, maxAmpGlobal, maxfftGlobal, maxPitchGlobal;
     //xml
     ofXml xml;

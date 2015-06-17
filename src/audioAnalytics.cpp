@@ -18,7 +18,7 @@ void audioAnalytics::setup() {
     faucet.loadFont("faucet.ttf", 18);
     faucetBold.loadFont("faucet.ttf", 20);
     
-    bFindMinMax = false;
+    bFindMinMax = true;
 }
 
 
@@ -91,6 +91,7 @@ void audioAnalytics::setupVectors(){
     maxdB.assign(numTracks, -120);
     maxAmp.assign(numTracks, 0);
     maxfft.assign(numTracks, 0);
+    maxFftPeak.assign(numTracks, 0);
     maxPitch.assign(numTracks, 0);
     maxCentroid.assign(numTracks, 75);
     maxSpread.assign(numTracks, 7000);
@@ -99,11 +100,7 @@ void audioAnalytics::setupVectors(){
     
     loadMinMax();
     
-    scrollingGraph dBGraph;
-    dBGraph.setup(ofGetWidth() - 200, -120, -120, maxdB[0]);
-    
-    scrollingGraph ampGraph;
-    ampGraph.setup(ofGetWidth() - 200, 0, 0, maxAmp[0]);
+   
     
     scrollingGraph pitchGraph;
     pitchGraph.setup(ofGetWidth() - 200, 0, 0, maxPitch[0]);
@@ -121,8 +118,22 @@ void audioAnalytics::setupVectors(){
     kurtosisGraph.setup(ofGetWidth() - 200, 0, 0, maxKurtosis[0]);
     
     for (int i = 0; i < numTracks; i++) {
+        scrollingGraph dBGraph;
+        dBGraph.setup(ofGetWidth() - 200, -120, -120, maxdB[i]);
+        
+        scrollingGraph ampGraph;
+        ampGraph.setup(ofGetWidth() - 200, 0, 0, maxAmp[i]);
+        
+        scrollingGraph fftPeakGraph;
+        fftPeakGraph.setup(ofGetWidth() - 200, 0, 0, maxFftPeak[i]);
+        
+        
         dBHistory.push_back(dBGraph);
         ampHistory.push_back(ampGraph);
+        fftPeakHistory.push_back(fftPeakGraph);
+        
+        
+        
         pitchHistory.push_back(pitchGraph);
         centroidHistory.push_back(centroidGraph);
         spreadHistory.push_back(spreadGraph);
@@ -199,12 +210,13 @@ void audioAnalytics::updateAnalytics(){
         audioFeatures[i]->inputBuffer = samples[i];
         audioFeatures[i]->process(0);
         
-        
-        float maxFft = 0.0;
-        for (unsigned int j = 0; j < audioFeatures[i]->spectrum.size(); j++){
-            if (audioFeatures[i]->spectrum[j] > maxFft){
-                maxFft = audioFeatures[i]->spectrum[j];
-                fftPeak[i] = j;
+        if (getAmpNormalized(i) > 0.2){
+            float maxFft = 0.0;
+            for (unsigned int j = 0; j < audioFeatures[i]->spectrum.size(); j++){
+                if (audioFeatures[i]->spectrum[j] > maxFft){
+                    maxFft = audioFeatures[i]->spectrum[j];
+                    fftPeak[i] = j;
+                }
             }
         }
         
@@ -218,6 +230,9 @@ void audioAnalytics::updateAnalytics(){
         
         dBHistory[i].addValue(dB[i]);
         ampHistory[i].addValue(amp[i]);
+        fftPeakHistory[i].addValue(fftPeak[i]);
+        
+        
         pitchHistory[i].addValue(pitch[i]);
         centroidHistory[i].addValue(centroid[i]);
         spreadHistory[i].addValue(spread[i]);
@@ -260,6 +275,7 @@ void audioAnalytics::findMinMax(int track){
     
     if (amp[track] > maxAmp[track]) maxAmp[track] = amp[track];
     if (dB[track] > maxdB[track]) maxdB[track] = dB[track];
+    if (fftPeak[track] > maxFftPeak[track]) maxFftPeak[track] = fftPeak[track];
     
     for (int j = 0; j < audioFeatures[track]->spectrum.size(); j++){
         float bin = audioFeatures[track]->spectrum[j];
@@ -281,6 +297,7 @@ void audioAnalytics::saveMinMax(){
         xml.addValue("maxAmp", maxAmp[i]);
         xml.addValue("maxdB", maxdB[i]);
         xml.addValue("maxfft", maxfft[i]);
+        xml.addValue("maxFftPeak", maxFftPeak[i]);
         xml.addValue("maxPitch", maxPitch[i]);
         
         xml.setToParent();
@@ -301,6 +318,7 @@ void audioAnalytics::loadMinMax(){
         maxAmp[i] = ofToFloat(xml.getValue("maxAmp"));
         maxdB[i] = ofToFloat(xml.getValue("maxdB"));
         maxfft[i] = ofToFloat(xml.getValue("maxfft"));
+        maxFftPeak[i] = ofToFloat(xml.getValue("maxFftPeak"));
         maxPitch[i] = ofToFloat(xml.getValue("maxPitch"));
         
         xml.setToParent();
@@ -387,7 +405,7 @@ void audioAnalytics::selectMode(int track, float height){
             
         case 5:
 //            ofSetColor(100,255,100);
-            pitchHistory[track].draw(height);
+            fftPeakHistory[track].draw(height);
 //            ofSetColor(255,100,255);
 //            pitchMeanHistory[track].draw(height);
 //
