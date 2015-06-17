@@ -61,7 +61,7 @@ void audioAnalytics::loadTracks(){
 
 //--------------------------------------------------------------
 void audioAnalytics::setupVectors(){
-    
+    fftPeak.assign(numTracks, 0);
     amp.assign(numTracks, 0.0);
     dB.assign(numTracks, 0.0);
     pitch.assign(numTracks, 0.0);
@@ -202,7 +202,7 @@ void audioAnalytics::playStems(float timeInSeconds){
         stems[i]->playAtSampleTime(timeInSamples);
     }
     
-    stems[0]->playAtSampleTime(timeInSamples);
+//    stems[0]->playAtSampleTime(timeInSamples);
 //    stems[1]->playAtSampleTime(timeInSamples);
 //    stems[2]->playAtSampleTime(timeInSamples);
 //    stems[3]->playAtSampleTime(timeInSamples);
@@ -228,6 +228,15 @@ void audioAnalytics::updateAnalytics(){
         taps[i]->getSamples(samples[i]);
         audioFeatures[i]->inputBuffer = samples[i];
         audioFeatures[i]->process(0);
+        
+        
+        float maxFft = 0.0;
+        for (unsigned int j = 0; j < audioFeatures[i]->spectrum.size(); j++){
+            if (audioFeatures[i]->spectrum[j] > maxFft){
+                maxFft = audioFeatures[i]->spectrum[j];
+                fftPeak[i] = j;
+            }
+        }
         
         dB[i] = mixer.getInputLevel(i);
         amp[i] = taps[i]->getRMS(0);//ofMap(taps[i]->getRMS(0), 0, maxAmp[i], 0.0, 1.0);
@@ -312,8 +321,8 @@ void audioAnalytics::saveMinMax(){
 
 //--------------------------------------------------------------
 void audioAnalytics::loadMinMax(){
-        xml.load("dataMinMax.xml");
-        xml.setTo("limits");
+    xml.load("dataMinMax.xml");
+    xml.setTo("limits");
     
     for (int i = 0; i < numTracks; i++) {
         string tag = "track-" + ofToString(i);
@@ -476,6 +485,12 @@ void audioAnalytics::drawFFT(int track, float height){
         if( j == audioFeatures[track]->spectrum.size() -1 ) ofVertex(x, height);
     }
     ofEndShape(false);
+    
+    ofSetColor(255);
+    int x = (float)fftPeak[track] / audioFeatures[track]->spectrum.size() * (ofGetWidth()-100) + 100;
+    float binNormalized = ofMap(audioFeatures[track]->spectrum[fftPeak[track]], 0, maxfft[track], 0.0, 1.0);
+    ofLine(x, height, x, height - binNormalized * height);
+    
 }
 
 ////////////////////////////EVENTS///////////////////////////////
