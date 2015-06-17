@@ -53,7 +53,6 @@ public:
     vector<ofxAudioUnitFilePlayer*> stems;
     vector<string> stemNames;
     vector<ofxAudioUnitTap*> taps;
-    vector<ofxAudioUnitFftNode*> ffts;
     vector<int> fftPeak;
     vector<ofPolyline> waves;
     vector<vector<float> > samples;

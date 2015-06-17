@@ -44,8 +44,8 @@ void audioAnalytics::loadTracks(){
         ofxAudioUnitTap * tap = new ofxAudioUnitTap();
         taps.push_back(tap);
         
-        ofxAudioUnitFftNode * fft = new ofxAudioUnitFftNode();
-        ffts.push_back(fft);
+//        ofxAudioUnitFftNode * fft = new ofxAudioUnitFftNode();
+//        ffts.push_back(fft);
         
         ofxAudioFeaturesChannel * channel = new ofxAudioFeaturesChannel();
         channel->setup(512, 64, 44100);
@@ -78,28 +78,6 @@ void audioAnalytics::setupVectors(){
     for ( int i = 0; i < numTracks; i++ ) {
         samples.push_back(fftValues);
     }
-    
-    
-//    for ( int i = 0; i < numTracks; i++ ) {
-//        ofxAudioUnitFilePlayer * stem = new ofxAudioUnitFilePlayer();
-//        stems.push_back(stem);
-//        
-//        ofxAudioUnitTap * tap = new ofxAudioUnitTap();
-//        taps.push_back(tap);
-//        
-//        ofxAudioUnitFftNode * fft = new ofxAudioUnitFftNode();
-//        ffts.push_back(fft);
-//        
-//        ofxAudioFeaturesChannel * channel = new ofxAudioFeaturesChannel();
-//        channel->setup(512, 64, 44100);
-//        channel->usingPitch = true;
-//        channel->usingOnsets = true;
-//        audioFeatures.push_back(channel);
-//        
-//        ofPolyline temp;
-//        waves.push_back(temp);
-//        
-//    }
     
     dBSmoothed.setNumPValues(35);
     ampSmoothed.setNumPValues(35);
@@ -201,14 +179,6 @@ void audioAnalytics::playStems(float timeInSeconds){
     for ( int i = 0; i < numTracks; i++ ) {
         stems[i]->playAtSampleTime(timeInSamples);
     }
-    
-//    stems[0]->playAtSampleTime(timeInSamples);
-//    stems[1]->playAtSampleTime(timeInSamples);
-//    stems[2]->playAtSampleTime(timeInSamples);
-//    stems[3]->playAtSampleTime(timeInSamples);
-//    stems[4]->playAtSampleTime(timeInSamples);
-//    stems[5]->playAtSampleTime(timeInSamples);
-//    stems[6]->playAtSampleTime(timeInSamples);
 }
 
 void audioAnalytics::stopStems(){
