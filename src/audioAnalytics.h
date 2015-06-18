@@ -1,6 +1,6 @@
 //
 //  audioAnalytics.h
-//  just_you
+//
 //
 //  Created by Jason Levine on 2013-11-06.
 //
@@ -8,12 +8,12 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxAudioUnit.h"
+//#include "ofxAudioUnit.h"
 #include "ofxAudioFeaturesChannel.h"
 #include "scrollingGraph.h"
 #include "smoother.h"
 
-#define FINDMINMAX
+#define LIVE
 
 class audioAnalytics {
 public:
@@ -21,11 +21,11 @@ public:
     
     void setupVectors();
     void loadTracks();
-    void setupAUGraph();
+//    void setupAUGraph();
     void playStems(float timeInSeconds);
     void stopStems();
     
-    void updateAnalytics();
+    void updateAnalytics(vector<vector<float> > &channels, vector<float> &rms);
     void findMinMax(int track);
     void saveMinMax();
     void loadMinMax();
@@ -46,14 +46,18 @@ public:
     void mousePressed(int x, int y);
     void keyPressed(int key);
     
-    vector<ofxAudioUnitFilePlayer*> stems;
+//    ofSoundStream soundStream;
+
+//    vector<ofxAudioUnitFilePlayer*> stems;
+
+    
     vector<string> stemNames;
-    vector<ofxAudioUnitTap*> taps;
-    vector<int> fftPeak;
-    vector<ofPolyline> waves;
+//    vector<ofxAudioUnitTap*> taps;
+    vector<float> fftPeak;
+//    vector<ofPolyline> waves;
     vector<vector<float> > samples;
-    ofxAudioUnitMixer mixer;
-    ofxAudioUnitOutput output;
+//    ofxAudioUnitMixer mixer;
+//    ofxAudioUnitOutput output;
 
     vector<ofxAudioFeaturesChannel*> audioFeatures;
 

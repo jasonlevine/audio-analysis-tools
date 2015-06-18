@@ -1,44 +1,50 @@
 <limits>
 	<track-0>
-		<maxAmp>0.233315</maxAmp>
-		<maxdB>-5.88471</maxdB>
-		<maxfft>74.1765</maxfft>
-		<maxFftPeak>195</maxFftPeak>
+		<maxAmp>0.160381</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>40.9887</maxfft>
+		<maxFftPeak>10</maxFftPeak>
 	</track-0>
 	<track-1>
-		<maxAmp>0.435152</maxAmp>
+		<maxAmp>0.00158869</maxAmp>
 		<maxdB>0</maxdB>
-		<maxfft>61.3859</maxfft>
-		<maxFftPeak>122</maxFftPeak>
+		<maxfft>0.00126741</maxfft>
+		<maxFftPeak>255</maxFftPeak>
 	</track-1>
 	<track-2>
-		<maxAmp>0.210322</maxAmp>
-		<maxdB>-4.54457</maxdB>
-		<maxfft>60.1548</maxfft>
-		<maxFftPeak>194</maxFftPeak>
+		<maxAmp>0.00116345</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>0.000652845</maxfft>
+		<maxFftPeak>255</maxFftPeak>
 	</track-2>
 	<track-3>
-		<maxAmp>0.543773</maxAmp>
-		<maxdB>-0.309762</maxdB>
-		<maxfft>145.401</maxfft>
-		<maxFftPeak>34</maxFftPeak>
+		<maxAmp>0.00118992</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>0.000643861</maxfft>
+		<maxFftPeak>255</maxFftPeak>
 	</track-3>
 	<track-4>
-		<maxAmp>0.204035</maxAmp>
-		<maxdB>-7.48956</maxdB>
-		<maxfft>39.9361</maxfft>
-		<maxFftPeak>13</maxFftPeak>
+		<maxAmp>0.0011134</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>0.000673645</maxfft>
+		<maxFftPeak>255</maxFftPeak>
 	</track-4>
 	<track-5>
-		<maxAmp>0.189475</maxAmp>
-		<maxdB>-6.59109</maxdB>
-		<maxfft>51.0001</maxfft>
-		<maxFftPeak>19</maxFftPeak>
+		<maxAmp>0.00120187</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>0.000778099</maxfft>
+		<maxFftPeak>255</maxFftPeak>
 	</track-5>
 	<track-6>
-		<maxAmp>0.146138</maxAmp>
-		<maxdB>-9.74376</maxdB>
-		<maxfft>23.2185</maxfft>
-		<maxFftPeak>227</maxFftPeak>
+		<maxAmp>0.0012362</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>0.00069018</maxfft>
+		<maxFftPeak>255</maxFftPeak>
 	</track-6>
+	<track-7>
+		<maxAmp>0.00119667</maxAmp>
+		<maxdB>0</maxdB>
+		<maxfft>0.000717963</maxfft>
+		<maxFftPeak>255</maxFftPeak>
+	</track-7>
 </limits>

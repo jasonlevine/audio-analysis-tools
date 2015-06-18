@@ -10,6 +10,7 @@ public:
     void setup();
     void update();
     void draw();
+    
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -20,6 +21,11 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    
+    void audioIn(float * input, int bufferSize, int nChannels);
+    vector <vector<float> > channel;
+    vector <float> smoothedVol;
+    ofSoundStream soundStream;
     
     audioAnalytics aa;
 };

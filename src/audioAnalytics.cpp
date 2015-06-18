@@ -11,20 +11,27 @@
 
 
 void audioAnalytics::setup() {
-    loadTracks();
+    int bufferSize = 1024;
+//    soundStream.setup(ofGetAppPtr(), 0, 8, 44100, bufferSize, 4);
+//    loadTracks();
+//    setupAUGraph();
+    numTracks = 8;
     setupVectors();
-    setupAUGraph();
+
+    
     
     faucet.loadFont("faucet.ttf", 18);
     faucetBold.loadFont("faucet.ttf", 20);
     
-    bFindMinMax = true;
+//    bFindMinMax = true;
+    
 }
 
 
 /////////////////////////////////SETUP//////////////////////////////////
 
 //--------------------------------------------------------------
+#ifndef LIVE
 void audioAnalytics::loadTracks(){
     //load stems dir
     ofDirectory stemsDir;
@@ -32,8 +39,6 @@ void audioAnalytics::loadTracks(){
     stemsDir.listDir();
     numTracks = stemsDir.size();
 
-
-    
     for ( int i = 0; i < numTracks; i++ ) {
         stemNames.push_back(stemsDir.getName(i));
         
@@ -43,21 +48,15 @@ void audioAnalytics::loadTracks(){
 
         ofxAudioUnitTap * tap = new ofxAudioUnitTap();
         taps.push_back(tap);
-        
-//        ofxAudioUnitFftNode * fft = new ofxAudioUnitFftNode();
-//        ffts.push_back(fft);
-        
+
         ofxAudioFeaturesChannel * channel = new ofxAudioFeaturesChannel();
         channel->setup(512, 64, 44100);
         channel->usingPitch = true;
         channel->usingOnsets = true;
         audioFeatures.push_back(channel);
-        
-        ofPolyline temp;
-        waves.push_back(temp);
     }
 }
-
+#endif
 
 //--------------------------------------------------------------
 void audioAnalytics::setupVectors(){
@@ -65,14 +64,12 @@ void audioAnalytics::setupVectors(){
     amp.assign(numTracks, 0.0);
     dB.assign(numTracks, 0.0);
 
-    
     vector<float> fftValues;
     fftValues.assign(512, 0);
     
     for ( int i = 0; i < numTracks; i++ ) {
         samples.push_back(fftValues);
     }
-    
     
     //analytics
     maxdB.assign(numTracks, -120);
@@ -81,9 +78,16 @@ void audioAnalytics::setupVectors(){
     maxFftPeak.assign(numTracks, 0);
     
     loadMinMax();
-    
    
     for (int i = 0; i < numTracks; i++) {
+        ofxAudioFeaturesChannel * channel = new ofxAudioFeaturesChannel();
+        channel->setup(512, 64, 44100);
+        channel->usingPitch = true;
+        channel->usingOnsets = true;
+        audioFeatures.push_back(channel);
+        
+        stemNames.push_back("track " + ofToString(i));
+
         scrollingGraph dBGraph;
         dBGraph.setup(ofGetWidth() - 200, -120, -120, maxdB[i]);
         
@@ -97,19 +101,19 @@ void audioAnalytics::setupVectors(){
         dBHistory.push_back(dBGraph);
         ampHistory.push_back(ampGraph);
         fftPeakHistory.push_back(fftPeakGraph);
-        
     }
     
     mode = 1;
     selectedTrack = -1;
 }
 
-
+#ifndef LIVE
 //--------------------------------------------------------------
 void audioAnalytics::setupAUGraph(){
     mixer.setInputBusCount(numTracks);
     
     for ( int i = 0; i < numTracks; i++ ) {
+
         stems[i]->connectTo(*taps[i]);
         (*taps[i]).connectTo(mixer, i);
         mixer.setInputVolume(1.0, i);
@@ -119,8 +123,10 @@ void audioAnalytics::setupAUGraph(){
     mixer.connectTo(output);
     output.start();
 }
+#endif
 
 //--------------------------------------------------------------
+#ifndef LIVE
 void audioAnalytics::playStems(float timeInSeconds){
 
     int sampleRate = 44100;
@@ -140,31 +146,47 @@ void audioAnalytics::stopStems(){
         stems[i]->stop();
     }
 }
-
+#endif
 ///////////////////////////UPDATE//////////////////////////
 //--------------------------------------------------------------
-void audioAnalytics::updateAnalytics(){
+void audioAnalytics::updateAnalytics(vector<vector<float> > &channels, vector<float> &rms){
+    
+    samples = channels;
+    amp = rms;
     for ( int i = 0; i < numTracks; i++ ) {
 
         float waveformSize = (selectedTrack == -1) ? ofGetHeight()/numTracks : ofGetHeight();
         
-        taps[i]->getLeftWaveform(waves[i], ofGetWidth(), waveformSize);///numTracks
-        taps[i]->getSamples(samples[i]);
+//    taps[i]->getLeftWaveform(waves[i], ofGetWidth(), waveformSize);///numTracks
+//    taps[i]->getSamples(samples[i]);
+//        float curvol = 0.0;
+//        for (int j = 0; j < samples[i].size(); j++){
+//            curvol += samples[i][j];
+//        }
+//        curvol /= (float)samples[i].size();
+//        
+//        amp[i] = sqrt(curvol);
+//        if (amp[i] != amp[i]) amp[i] = ampHistory[i].valHistory[ampHistory[i].valHistory.size()];
+//        cout << "amp[" << i << "] = " << amp[i] << endl;
+        
         audioFeatures[i]->inputBuffer = samples[i];
         audioFeatures[i]->process(0);
         
+        float currPeak = 0;
         if (getAmpNormalized(i) > 0.2){
             float maxFft = 0.0;
             for (unsigned int j = 0; j < audioFeatures[i]->spectrum.size(); j++){
                 if (audioFeatures[i]->spectrum[j] > maxFft){
                     maxFft = audioFeatures[i]->spectrum[j];
-                    fftPeak[i] = j;
+                    currPeak = j;
                 }
             }
         }
+        fftPeak[i] = fftPeak[i] * 0.5 + currPeak * 0.5;
         
-        dB[i] = mixer.getInputLevel(i);
-        amp[i] = taps[i]->getRMS(0);//ofMap(taps[i]->getRMS(0), 0, maxAmp[i], 0.0, 1.0);
+        
+        dB[i] = 0;//mixer.getInputLevel(i);
+//      //taps[i]->getRMS(0);//ofMap(taps[i]->getRMS(0), 0, maxAmp[i], 0.0, 1.0);
         
         dBHistory[i].addValue(dB[i]);
         ampHistory[i].addValue(amp[i]);
@@ -173,7 +195,7 @@ void audioAnalytics::updateAnalytics(){
         if (bFindMinMax) findMinMax(i);
     }
     
-
+    
 }
 
 
@@ -303,8 +325,20 @@ void audioAnalytics::selectMode(int track, float height){
 //--------------------------------------------------------------
 void audioAnalytics::drawWaveForms(int track, float height){
     //ofSetLineWidth(10);
-    waves[track].draw();
+    ofPushStyle();
+    ofNoFill();
+    ofBeginShape();
+    for (int i = 0; i < samples[track].size(); i++){
+        int x = float(i) / samples[track].size() * ofGetWidth();
+        int y = samples[track][i] * height + height * 0.5;
+        
+        ofVertex(x, y);
+    }
+    ofEndShape();
+    ofPopStyle();
+    
 }
+
 
 
 //--------------------------------------------------------------
