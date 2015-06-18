@@ -29,7 +29,6 @@ public:
     void findMinMax(int track);
     void saveMinMax();
     void loadMinMax();
-//    void recordPitchData(int track, bool save);
     
     void setMode(int chosenMode);
     void selectTrack(int x, int y);
@@ -40,11 +39,6 @@ public:
     void drawDBHistory(int track, float height);
     void drawFFT(int track, float height);
     void drawFFTPeakHistory(int track, float height);
-    void drawPitchHistory(int track, float height);
-    void drawCentroidHistory(int track, float height);
-    void drawSpreadHistory(int track, float height);
-    void drawSkewHistory(int track, float height);
-    void drawKurtosisHistory(int track, float height);
     
     float getAmpNormalized(int track) { return ofMap(amp[track], 0, maxAmp[track], 0.0, 1.0); }
     float getFFTPeakNormalized(int track) { return ofMap(fftPeak[track], 0, maxFftPeak[track], 0.0, 1.0); }
@@ -65,44 +59,22 @@ public:
 
     vector<float> dB;
     vector<float> amp;
-    vector<float> pitch;
-    vector<float> centroid;
-    vector<float> spread;
-    vector<float> skew;
-    vector<float> kurtosis;
-    
+
     vector<scrollingGraph> ampHistory;
     vector<scrollingGraph> dBHistory;
-    vector<scrollingGraph> pitchHistory;
     vector<scrollingGraph> fftPeakHistory;
-    vector<scrollingGraph> centroidHistory;
-    vector<scrollingGraph> spreadHistory;
-    vector<scrollingGraph> skewHistory;
-    vector<scrollingGraph> kurtosisHistory;
     
-    smoother dBSmoothed;
-    smoother ampSmoothed;
-    smoother pitchSmoothed;
-    smoother centroidSmoothed;
-    smoother spreadSmoothed;
-    smoother skewSmoothed;
-    smoother kurtosisSmoothed;
+//    smoother dBSmoothed;
+//    smoother ampSmoothed;
+
     
-    vector<scrollingGraph> ampMeanHistory;
-    vector<scrollingGraph> dBMeanHistory;
-    vector<scrollingGraph> pitchMeanHistory;
-    vector<scrollingGraph> centroidMeanHistory;
-    vector<scrollingGraph> spreadMeanHistory;
-    vector<scrollingGraph> skewMeanHistory;
-    vector<scrollingGraph> kurtosisMeanHistory;
-    
-    vector<scrollingGraph> ampMedianHistory;
-    vector<scrollingGraph> dBMedianHistory;
-    vector<scrollingGraph> pitchMedianHistory;
-    vector<scrollingGraph> centroidMedianHistory;
-    vector<scrollingGraph> spreadMedianHistory;
-    vector<scrollingGraph> skewMedianHistory;
-    vector<scrollingGraph> kurtosisMedianHistory;
+//    vector<scrollingGraph> ampMeanHistory;
+//    vector<scrollingGraph> dBMeanHistory;
+//
+//    
+//    vector<scrollingGraph> ampMedianHistory;
+//    vector<scrollingGraph> dBMedianHistory;
+
     
     int numTracks;
 
@@ -112,8 +84,7 @@ public:
     bool bFindMinMax;
 
     //analytics
-    vector <float> maxdB, maxAmp, maxfft, maxFftPeak, maxPitch, maxCentroid, maxSpread, maxSkew, maxKurtosis;
-    float maxdBGlobal, maxAmpGlobal, maxfftGlobal, maxPitchGlobal;
+    vector <float> maxdB, maxAmp, maxfft, maxFftPeak;
     //xml
     ofXml xml;
     

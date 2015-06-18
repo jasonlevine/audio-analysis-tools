@@ -30,23 +30,3 @@ void scrollingGraph::draw(float height) {
     ofEndShape(false);
     ofFill();
 }
-
-
-/*
- //--------------------------------------------------------------
- void audioAnalytics::drawAmpHistory(int track, float height){
- ofBeginShape();
- for (unsigned int j = 0; j < ampHistory[track].size(); j++){
- if( j == 0 ) ofVertex(j + 100, height);
- ofVertex(j + 100, height - ampHistory[track][j] * height);
- 
- if( j == ampHistory[track].size() -1 ) ofVertex(j + 100, height);
- }
- ofEndShape(false);
- 
- ofRect(ofGetWidth() - 90, height, 80, -amp[track] * height);
- //    float size = ampNormalized * height;
- //ofCircle(ofGetWidth() - 50, height - size / 2, size/2);
- 
- }
-*/
