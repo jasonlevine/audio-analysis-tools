@@ -243,7 +243,7 @@ void audioAnalytics::loadMinMax(){
         xml.setTo(tag);
         
         maxAmp[i] = ofToFloat(xml.getValue("maxAmp"));
-        maxdB[i] = ofToFloat(xml.getValue("maxdB"));
+//        maxdB[i] = ofToFloat(xml.getValue("maxdB"));
         maxfft[i] = ofToFloat(xml.getValue("maxfft"));
         maxFftPeak[i] = ofToFloat(xml.getValue("maxFftPeak"));
         
