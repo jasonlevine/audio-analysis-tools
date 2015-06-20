@@ -31,8 +31,6 @@ void audioAnalytics::loadTracks(){
     stemsDir.open("stems");
     stemsDir.listDir();
     numTracks = stemsDir.size();
-
-
     
     for ( int i = 0; i < numTracks; i++ ) {
         stemNames.push_back(stemsDir.getName(i));
@@ -51,6 +49,7 @@ void audioAnalytics::loadTracks(){
         channel->setup(512, 64, 44100);
         channel->usingPitch = true;
         channel->usingOnsets = true;
+
         audioFeatures.push_back(channel);
         
         ofPolyline temp;
@@ -152,6 +151,7 @@ void audioAnalytics::updateAnalytics(){
         taps[i]->getSamples(samples[i]);
         audioFeatures[i]->inputBuffer = samples[i];
         audioFeatures[i]->process(0);
+        audioFeatures[i]->updateSmoothedSpectrum(audioFeatures[i]->spectrum, 0, 0.95);
         
         if (getAmpNormalized(i) > 0.2){
             float maxFft = 0.0;

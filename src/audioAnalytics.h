@@ -40,8 +40,8 @@ public:
     void drawFFT(int track, float height);
     void drawFFTPeakHistory(int track, float height);
     
-    float getAmpNormalized(int track) { return ofMap(amp[track], 0, maxAmp[track], 0.0, 1.0); }
-    float getFFTPeakNormalized(int track) { return ofMap(fftPeak[track], 0, maxFftPeak[track], 0.0, 1.0); }
+    float getAmpNormalized() { return ofMap(amp[selectedTrack], 0, maxAmp[selectedTrack], 0.0, 1.0); }
+    float getFFTPeakNormalized() { return ofMap(fftPeak[selectedTrack], 0, maxFftPeak[selectedTrack], 0.0, 1.0); }
     
     void mousePressed(int x, int y);
     void keyPressed(int key);
