@@ -153,7 +153,7 @@ void audioAnalytics::updateAnalytics(){
         audioFeatures[i]->process(0);
         audioFeatures[i]->updateSmoothedSpectrum(audioFeatures[i]->spectrum, 0, 0.95);
         
-        if (getAmpNormalized(i) > 0.2){
+        if (getAmpNormalized() > 0.2){
             float maxFft = 0.0;
             for (unsigned int j = 0; j < audioFeatures[i]->spectrum.size(); j++){
                 if (audioFeatures[i]->spectrum[j] > maxFft){
