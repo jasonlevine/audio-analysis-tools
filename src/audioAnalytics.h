@@ -22,8 +22,8 @@ public:
     void setupVectors();
     void loadTracks();
 //    void setupAUGraph();
-    void playStems(float timeInSeconds);
-    void stopStems();
+//    void playStems(float timeInSeconds);
+//    void stopStems();
     
     void updateAnalytics(vector<vector<float> > &channels, vector<float> &rms);
     void findMinMax(int track);
@@ -43,6 +43,10 @@ public:
     float getAmpNormalized(int track) { return ofMap(amp[track], 0, maxAmp[track], 0.0, 1.0); }
     float getFFTPeakNormalized(int track) { return ofMap(fftPeak[track], 0, maxFftPeak[track], 0.0, 1.0); }
     
+    float getAmpNormalized() { return ofMap(amp[selectedTrack], 0, maxAmp[selectedTrack], 0.0, 1.0); }
+    float getFFTPeakNormalized() { return ofMap(fftPeak[selectedTrack], 0, maxFftPeak[selectedTrack], 0.0, 1.0); }
+
+    vector<float>& getSamples() { return samples[selectedTrack]; }
     void mousePressed(int x, int y);
     void keyPressed(int key);
     

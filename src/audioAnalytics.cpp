@@ -23,7 +23,7 @@ void audioAnalytics::setup() {
     faucet.loadFont("faucet.ttf", 18);
     faucetBold.loadFont("faucet.ttf", 20);
     
-//    bFindMinMax = true;
+    bFindMinMax = false;
     
 }
 
@@ -379,6 +379,13 @@ void audioAnalytics::keyPressed(int key){
     if (key == 's') {
         saveMinMax();
         bFindMinMax = false;
+    }
+    
+    if (key == 'f') {
+        maxAmp.assign(numTracks, 0);
+        maxfft.assign(numTracks, 0);
+        maxFftPeak.assign(numTracks, 0);
+        bFindMinMax = true;
     }
 }
 
